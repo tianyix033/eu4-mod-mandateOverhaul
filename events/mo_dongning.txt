@@ -92,7 +92,7 @@ country_event = {
 		add_government_reform = pirate_republic_reform
 	}
 
-	option = {		# Look outward instead
+	option = {		# Build a base in the south first - still aiming at China
 		name = mo_dongning.1.e
 		ai_chance = {
 			factor = 5
