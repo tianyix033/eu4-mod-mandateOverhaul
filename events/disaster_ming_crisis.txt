@@ -121,10 +121,22 @@ country_event = {
 			region = north_china_region
 			controlled_by = REB
 		}
-		any_owned_province = {			#@ new. Ten open provinces is a peasant revolt; a dynasty
-			region = north_china_region	#@ does not fall until a fortress falls with them.
-			controlled_by = REB
-			fort_level = 1
+		OR = {							#@ new. Ten open provinces is a peasant revolt; a dynasty does
+										#@ not fall until a fortress falls with them - OR until sheer
+										#@ weight of numbers makes the fortresses beside the point.
+										#@ The second branch matters because an AI Ming can mothball or
+										#@ demolish its northern forts to save ducats, and without it
+										#@ the whole event would then be unreachable.
+			any_owned_province = {
+				region = north_china_region
+				controlled_by = REB
+				fort_level = 1
+			}
+			num_of_owned_provinces_with = {
+				value = 22				#@ north_china_region holds 43 provinces, so this is the majority
+				region = north_china_region
+				controlled_by = REB
+			}
 		}
 		any_owned_province = {
 			OR = {

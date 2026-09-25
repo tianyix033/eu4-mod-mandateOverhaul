@@ -43,14 +43,21 @@ country_event = {
 			region = north_china_region
 			controlled_by = ROOT
 		}
-		# More than half the north is in rebel hands. north_china_region holds 43
-		# provinces, so 22 is the majority. Note this counts provinces we still
-		# OWN - anything already ceded to Shun stops counting, which is why this
-		# wants to fire before the Shun release rather than after.
-		num_of_owned_provinces_with = {
-			value = 22
-			region = north_china_region
-			controlled_by = REB
+		# Either a rebel dynasty has actually declared itself, or the north is
+		# coming apart at ten provinces and counting.
+		#
+		# The two branches are not interchangeable. num_of_owned_provinces_with
+		# counts provinces we still OWN, so the moment Shun is released those
+		# provinces stop counting and the tally collapses - a threshold alone
+		# would go quiet exactly when the crisis became real. exists = CSH
+		# catches that case.
+		OR = {
+			exists = CSH
+			num_of_owned_provinces_with = {
+				value = 10
+				region = north_china_region
+				controlled_by = REB
+			}
 		}
 	}
 
