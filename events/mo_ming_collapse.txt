@@ -179,6 +179,16 @@ country_event = {
 
 	trigger = {
 		is_emperor_of_china = yes
+		# Only during an actual dynastic collapse. Without this the event fires
+		# for any emperor who loses his capital for a month in a border war he
+		# goes on to win, and kills the ruler for it.
+		#
+		# has_any_disaster rather than has_disaster = ming_crisis on purpose:
+		# that disaster carries potential = { tag = MNG }, so naming it would
+		# quietly make this a Ming-only event and leave every later dynasty
+		# unable to fall the same way. Any disaster will do - the point is that
+		# the state is already coming apart, not which way.
+		has_any_disaster = yes
 		capital_scope = {
 			NOT = { controlled_by = ROOT }
 		}
@@ -197,5 +207,59 @@ country_event = {
 			duration = 7300
 		}
 		kill_ruler = yes
+		# Chained rather than given its own trigger, so it cannot possibly land
+		# before this one and move the capital out from under it.
+		country_event = { id = mo_ming.3 }
+	}
+}
+
+########################################
+# The North Is Theirs
+#
+# Beijing has fallen. Whoever took it now holds the north in fact, so give them
+# it on paper - Shun if the rebels did it, otherwise nothing, since a foreign
+# conqueror already owns what it occupies.
+#
+# This restores something ming_crisis.3 used to do unconditionally. We took
+# hebei_area off Shun's core list there because a Shaanxi peasant army should
+# have to march on Beijing rather than be handed it. This is the other half of
+# that bargain: march on it, and the north is yours.
+#
+# It also re-opens the Manchu path. mch_great_wall completes when Shenyang's
+# owner is at war with the Manchu and is either Shun or a weak emperor, and
+# fires mch_missions.1 - the invasion. Shun holding the north is what makes
+# that a live proposition rather than a dead mission.
+########################################
+country_event = {
+	id = mo_ming.3
+	title = mo_ming.3.t
+	desc = mo_ming.3.d
+	hidden = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = CSH
+					1816 = { controlled_by = CSH }
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							area = hebei_area
+							area = south_hebei_area
+						}
+					}
+					add_core = CSH
+					cede_province = CSH
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mo_ming.3.a
 	}
 }
