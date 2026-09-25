@@ -42,17 +42,22 @@ country_decisions = {
 				}
 				CZH = { country_event = { id = mo_feudatory.2 } }
 			}
-			else = {
-				random_subject_country = {
-					limit = {
-						OR = {
-							tag = YUE
-							tag = MIN
-						}
-					}
-					# The stronger of the two speaks for the rest.
-					country_event = { id = mo_feudatory.2 }
+			# Seniority, not chance. Zhou first - Wu Sangui was the senior of the
+			# three and the one who actually raised the revolt. Then Yue, whose
+			# Guangdong was the larger of the remaining two. random_subject_country
+			# would have picked either at random despite the comment saying
+			# otherwise.
+			else_if = {
+				limit = {
+					YUE = { is_subject_of = ROOT }
 				}
+				YUE = { country_event = { id = mo_feudatory.2 } }
+			}
+			else_if = {
+				limit = {
+					MIN = { is_subject_of = ROOT }
+				}
+				MIN = { country_event = { id = mo_feudatory.2 } }
 			}
 			clr_country_flag = mo_feudatories_established
 		}

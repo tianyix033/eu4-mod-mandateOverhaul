@@ -104,10 +104,12 @@ country_event = {
 				add_ruler_modifier = {
 					name = mo_the_prince_who_turned
 				}
-				create_subject = {
-					subject_type = vassal
-					subject = CZH
-				}
+			}
+			#@ create_subject makes the CURRENT scope the overlord, so it has to
+			#@ run here and not inside CZH = { }, where CZH would become its own.
+			create_subject = {
+				subject_type = vassal
+				subject = CZH
 			}
 		}
 		if = {
@@ -118,10 +120,12 @@ country_event = {
 					name = "Zhixin"
 					dynasty = "Shang"
 				}
-				create_subject = {
-					subject_type = vassal
-					subject = YUE
-				}
+			}
+			#@ create_subject makes the CURRENT scope the overlord, so it has to
+			#@ run here and not inside YUE = { }, where YUE would become its own.
+			create_subject = {
+				subject_type = vassal
+				subject = YUE
 			}
 		}
 		if = {
@@ -132,10 +136,12 @@ country_event = {
 					name = "Jingzhong"
 					dynasty = "Geng"
 				}
-				create_subject = {
-					subject_type = vassal
-					subject = MIN
-				}
+			}
+			#@ create_subject makes the CURRENT scope the overlord, so it has to
+			#@ run here and not inside MIN = { }, where MIN would become its own.
+			create_subject = {
+				subject_type = vassal
+				subject = MIN
 			}
 		}
 		set_country_flag = mo_feudatories_established
@@ -197,9 +203,15 @@ country_event = {
 		overlord = {
 			save_event_target_as = mo_the_emperor
 		}
+		#@ cb_independence_war, not cb_chinese_unification. The feudatories are
+		#@ vassals, and cb_chinese_unification carries valid_for_subject = no -
+		#@ a subject cannot declare with it. The independence CB is built for
+		#@ exactly this case (prerequisites: is_subject_of = FROM) and vanilla
+		#@ uses it the same way elsewhere in disaster_ming_crisis.txt. Once free
+		#@ they hold chinese_warlord, which grants the unification CB anyway.
 		declare_war_with_cb = {
 			who = event_target:mo_the_emperor
-			casus_belli = cb_chinese_unification
+			casus_belli = cb_independence_war
 		}
 		# The other two rise with them, if they are still subjects of the same
 		# court and have not already been folded in.
@@ -215,7 +227,7 @@ country_event = {
 			}
 			declare_war_with_cb = {
 				who = event_target:mo_the_emperor
-				casus_belli = cb_chinese_unification
+				casus_belli = cb_independence_war
 			}
 		}
 	}
