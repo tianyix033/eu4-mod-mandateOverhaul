@@ -1,0 +1,247 @@
+# MandateOverhaul - the Three Feudatories
+#
+# Items 7 and 8 of planning/MandateOverhaul/Chinese_events.txt.
+#
+# A conquest dynasty cannot garrison the south with its own men. The Qing paid
+# for the south by handing it to the Chinese generals who had changed sides,
+# and then spent eight years taking it back off them. That bargain, and the
+# reckoning that follows it, is what these events are.
+#
+# Territory, checked against the map:
+#   Zhou  CZH  capital 662 Yunnan      -> yun_gui_area, yun_gui_borderland_area
+#   Yue   YUE  capital 667 Canton      -> guangdong_area, west_guangdong_area
+#   Min   MIN  capital 2152 Jianning   -> fujian_area
+#
+# Min's vanilla capital is Quanzhou 1829, which is coastal and may well belong
+# to Dongning by the time this fires. Jianning is the inland Fujianese
+# alternative - Tingzhou is also inland but hakka, which would hand Min a
+# capital of the wrong culture on day one.
+#
+# south_china_region is 47 provinces and xinan_region is 20, so 62 of 67 is the
+# "minus five for buffer" bar.
+
+namespace = mo_feudatory
+
+########################################
+# The Three Feudatories
+########################################
+country_event = {
+	id = mo_feudatory.1
+	title = mo_feudatory.1.t
+	desc = mo_feudatory.1.d
+	picture = COURT_eventPicture
+
+	fire_only_once = yes
+	major = yes
+
+	trigger = {
+		is_emperor_of_china = yes
+		NOT = { culture_group = east_asian }		# a conquest dynasty, not a native one
+		num_of_owned_provinces_with = {
+			value = 62
+			OR = {
+				region = south_china_region
+				region = xinan_region
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+
+	option = {		# Reward them
+		name = mo_feudatory.1.a
+		ai_chance = {
+			factor = 100
+		}
+		# Wu Sangui stops being our general and becomes their prince. If an
+		# earlier mission already handed him over, take him back first -
+		# kill_leader is vanilla's own idiom for this exact leader.
+		if = {
+			limit = { has_leader = "Wu Sangui" }
+			kill_leader = { type = "Wu Sangui" }
+		}
+
+		yun_gui_area = {
+			limit = { owned_by = ROOT }
+			add_core = CZH
+			cede_province = CZH
+		}
+		yun_gui_borderland_area = {
+			limit = { owned_by = ROOT }
+			add_core = CZH
+			cede_province = CZH
+		}
+		guangdong_area = {
+			limit = { owned_by = ROOT }
+			add_core = YUE
+			cede_province = YUE
+		}
+		west_guangdong_area = {
+			limit = { owned_by = ROOT }
+			add_core = YUE
+			cede_province = YUE
+		}
+		fujian_area = {
+			limit = { owned_by = ROOT }
+			add_core = MIN
+			cede_province = MIN
+		}
+
+		if = {
+			limit = { exists = CZH }
+			CZH = {
+				set_capital = 662
+				define_ruler = {
+					name = "Sangui"
+					dynasty = "Wu"
+					adm = 3
+					dip = 3
+					mil = 5
+				}
+				# Ends when he does, which is the point of the bargain.
+				add_ruler_modifier = {
+					name = mo_the_prince_who_turned
+				}
+				create_subject = {
+					subject_type = vassal
+					subject = CZH
+				}
+			}
+		}
+		if = {
+			limit = { exists = YUE }
+			YUE = {
+				set_capital = 667
+				define_ruler = {
+					name = "Zhixin"
+					dynasty = "Shang"
+				}
+				create_subject = {
+					subject_type = vassal
+					subject = YUE
+				}
+			}
+		}
+		if = {
+			limit = { exists = MIN }
+			MIN = {
+				set_capital = 2152
+				define_ruler = {
+					name = "Jingzhong"
+					dynasty = "Geng"
+				}
+				create_subject = {
+					subject_type = vassal
+					subject = MIN
+				}
+			}
+		}
+		set_country_flag = mo_feudatories_established
+	}
+
+	option = {		# Govern it ourselves
+		name = mo_feudatory.1.b
+		ai_chance = {
+			factor = 0
+		}
+		add_meritocracy = -20
+		every_owned_province = {
+			limit = { region = south_china_region }
+			add_province_modifier = {
+				name = mo_resentful_of_the_conquest
+				duration = 7300
+			}
+		}
+		random_owned_province = {
+			limit = { region = south_china_region }
+			spawn_rebels = {
+				type = nationalist_rebels
+				size = 5
+			}
+		}
+		random_owned_province = {
+			limit = { region = xinan_region }
+			spawn_rebels = {
+				type = nationalist_rebels
+				size = 5
+			}
+		}
+	}
+}
+
+########################################
+# Losing Feudatory Status
+#
+# Fired at a feudatory by the decision in decisions/mo_feudatories.txt.
+########################################
+country_event = {
+	id = mo_feudatory.2
+	title = mo_feudatory.2.t
+	desc = mo_feudatory.2.d
+	picture = ANGRY_MOB_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {		# Revolt
+		name = mo_feudatory.2.a
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				liberty_desire = 50
+			}
+		}
+		overlord = {
+			save_event_target_as = mo_the_emperor
+		}
+		declare_war_with_cb = {
+			who = event_target:mo_the_emperor
+			casus_belli = cb_chinese_unification
+		}
+		# The other two rise with them, if they are still subjects of the same
+		# court and have not already been folded in.
+		every_country = {
+			limit = {
+				OR = {
+					tag = CZH
+					tag = YUE
+					tag = MIN
+				}
+				NOT = { tag = ROOT }
+				is_subject_of = event_target:mo_the_emperor
+			}
+			declare_war_with_cb = {
+				who = event_target:mo_the_emperor
+				casus_belli = cb_chinese_unification
+			}
+		}
+	}
+
+	option = {		# Comply
+		name = mo_feudatory.2.b
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				liberty_desire = 50
+			}
+		}
+		# overlord = { inherit = PREV } is vanilla's own idiom for a subject being
+		# swallowed by its overlord - see FlavorTUR.
+		overlord = { save_event_target_as = mo_the_emperor }
+		every_country = {
+			limit = {
+				OR = {
+					tag = CZH
+					tag = YUE
+					tag = MIN
+				}
+				is_subject_of = event_target:mo_the_emperor
+			}
+			overlord = { inherit = PREV }
+		}
+	}
+}

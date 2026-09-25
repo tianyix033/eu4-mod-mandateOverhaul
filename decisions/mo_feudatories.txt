@@ -1,0 +1,78 @@
+# MandateOverhaul - abolishing the feudatories
+#
+# The Kangxi Emperor's chefan, the abolition of the feudatories. Ten years
+# after the bargain is struck, the court
+# may decide it no longer needs the men who sold it the south - which is how
+# the Revolt of the Three Feudatories started, and it very nearly cost the Qing
+# the dynasty.
+#
+# The decision fires mo_feudatory.2 at the senior feudatory: Zhou if it is
+# still a subject, otherwise whichever of Yue and Min is larger. That one
+# decides for all three.
+
+country_decisions = {
+
+	mo_abolish_the_feudatories = {
+		major = yes
+		potential = {
+			has_dlc = "Mandate of Heaven"
+			is_emperor_of_china = yes
+			has_country_flag = mo_feudatories_established
+			had_country_flag = {
+				flag = mo_feudatories_established
+				days = 3650
+			}
+			any_subject_country = {
+				OR = {
+					tag = CZH
+					tag = YUE
+					tag = MIN
+				}
+			}
+		}
+		allow = {
+			is_at_war = no
+			stability = 1
+			NOT = { has_regency = yes }
+		}
+		effect = {
+			if = {
+				limit = {
+					CZH = { is_subject_of = ROOT }
+				}
+				CZH = { country_event = { id = mo_feudatory.2 } }
+			}
+			else = {
+				random_subject_country = {
+					limit = {
+						OR = {
+							tag = YUE
+							tag = MIN
+						}
+					}
+					# The stronger of the two speaks for the rest.
+					country_event = { id = mo_feudatory.2 }
+				}
+			}
+			clr_country_flag = mo_feudatories_established
+		}
+		ai_will_do = {
+			factor = 1
+			# The court does not pick this fight while it is weak. Mandate
+			# above 50, solvent, and with the manpower to lose a war twice.
+			modifier = {
+				factor = 0
+				NOT = { imperial_mandate = 50 }
+			}
+			modifier = {
+				factor = 0
+				is_bankrupt = yes
+			}
+			modifier = {
+				factor = 0
+				NOT = { manpower_percentage = 0.33 }
+			}
+		}
+		ai_importance = 300
+	}
+}

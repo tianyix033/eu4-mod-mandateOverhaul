@@ -1,0 +1,13 @@
+# MandateOverhaul - the Three Feudatories
+
+# On Zhou's ruler, so it ends with Wu Sangui himself. He was the best soldier
+# any of the three had, and the revolt lost its momentum when he died.
+mo_the_prince_who_turned = {
+	land_morale = 0.10
+	discipline = 0.05
+}
+
+# On southern provinces when the Emperor decides to garrison them himself.
+mo_resentful_of_the_conquest = {
+	local_unrest = 5
+}
