@@ -1,0 +1,20 @@
+# MandateOverhaul - Dongning
+
+# The Zheng were a maritime trading house that happened to own a state. Three
+# provinces on Taiwan cannot carry that, so the weight goes on the country.
+# Flat values on purpose: this represents a network, not a tax base, and it
+# should not shrink when the mainland does.
+mo_the_zheng_maritime_network = {
+	global_tax_income = 120
+	global_trade_power = 0.25
+	global_sailors = 15000
+	global_manpower = 5
+	naval_forcelimit = 30
+	land_forcelimit = 30
+}
+
+# Looking south instead of west.
+mo_look_to_the_southern_seas = {
+	range = 0.25
+	colony_cost_modifier = -0.25
+}

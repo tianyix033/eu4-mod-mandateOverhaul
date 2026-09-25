@@ -1,0 +1,167 @@
+# MandateOverhaul - the fate of the Zheng regime on Taiwan
+#
+# Items 5 and 6 of planning/MandateOverhaul/Chinese_events.txt.
+#
+# Koxinga's successors held Taiwan for two decades after the mainland was gone,
+# and the question they actually faced was what a Ming loyalist state is for
+# once there is no Ming to be loyal to. Vanilla has no answer; it drops Formosa
+# on the map and forgets it.
+#
+# One geography note that shapes the whole file: taiwan_area sits inside
+# south_china_region, which sits inside china_superregion. So "lost the
+# mainland" cannot be written as "owns nothing in china_superregion" - Taiwan
+# would count. It has to be "owns nothing in china_superregion that is not
+# Taiwan", which is what the trigger below says.
+
+namespace = mo_dongning
+
+########################################
+# The Fate of Taiwan
+#
+# Fires for Formosa once the mainland is gone and the mandate sits with someone
+# who is not the Ming.
+########################################
+country_event = {
+	id = mo_dongning.1
+	title = mo_dongning.1.t
+	desc = mo_dongning.1.d
+	picture = NAVAL_MILITARY_eventPicture
+
+	fire_only_once = yes
+	major = yes
+
+	trigger = {
+		tag = FRM
+		is_subject = no
+		any_owned_province = {
+			area = taiwan_area
+		}
+		NOT = {
+			any_owned_province = {
+				superregion = china_superregion
+				NOT = { area = taiwan_area }
+			}
+		}
+		any_country = {
+			is_emperor_of_china = yes
+			NOT = { tag = MNG }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+
+	option = {		# Fight on for the Ming
+		name = mo_dongning.1.a
+		ai_chance = {
+			factor = 10
+		}
+		set_country_flag = mo_dongning_defiant
+		every_country = {
+			limit = { is_emperor_of_china = yes }
+			add_opinion = {
+				who = ROOT
+				modifier = mo_opinion_pretender
+			}
+		}
+	}
+
+	option = {		# Submit to the new dynasty as a tributary
+		name = mo_dongning.1.b
+		ai_chance = {
+			factor = 65
+			modifier = {
+				factor = 0
+				has_ruler = "Koxinga"
+			}
+		}
+		add_prestige = -25
+		every_country = {
+			limit = { is_emperor_of_china = yes }
+			country_event = { id = mo_dongning.2 }
+		}
+	}
+
+	option = {		# Remain what we started as
+		name = mo_dongning.1.c
+		ai_chance = {
+			factor = 20
+		}
+		change_government = republic
+		add_government_reform = pirate_republic_reform
+	}
+
+	option = {		# Look outward instead
+		name = mo_dongning.1.d
+		ai_chance = {
+			factor = 5
+		}
+		add_country_modifier = {
+			name = mo_look_to_the_southern_seas
+			duration = 9125
+		}
+		luzon_area = { add_permanent_claim = ROOT }
+		southern_luzon_area = { add_permanent_claim = ROOT }
+		visayas_area = { add_permanent_claim = ROOT }
+		mindanao_area = { add_permanent_claim = ROOT }
+		west_mindanao_area = { add_permanent_claim = ROOT }
+		palawan_area = { add_permanent_claim = ROOT }
+	}
+}
+
+########################################
+# Decide the Fate of Taiwan
+#
+# The Emperor's half of the exchange. Fires only from mo_dongning.1 option b.
+########################################
+country_event = {
+	id = mo_dongning.2
+	title = mo_dongning.2.t
+	desc = mo_dongning.2.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {		# Accept
+		name = mo_dongning.2.a
+		ai_chance = {
+			factor = 50
+		}
+		create_subject = {
+			subject_type = tributary_state
+			subject = FRM
+		}
+		add_trust = {
+			who = FRM
+			value = 25
+			mutual = yes
+		}
+	}
+
+	option = {		# Refuse
+		name = mo_dongning.2.b
+		ai_chance = {
+			factor = 50
+			modifier = {
+				# "Twice as strong at sea" - naval_strength compares the two
+				# navies directly, which navy_size_percentage does not: that one
+				# measures a navy against its own force limit.
+				# ROOT here is the Emperor: "my navy is at least twice theirs",
+				# so I have no need of their fleet and can afford the insult.
+				factor = 2
+				naval_strength = {
+					who = FRM
+					value = 2
+				}
+			}
+		}
+		add_trust = {
+			who = FRM
+			value = -25
+			mutual = yes
+		}
+		FRM = { set_country_flag = mo_dongning_defiant }
+	}
+}

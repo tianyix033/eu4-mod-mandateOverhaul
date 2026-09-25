@@ -1,0 +1,29 @@
+# MandateOverhaul
+#
+# A surviving loyalist court that still refuses to recognise you is a standing
+# argument that Heaven has not in fact spoken. It costs mandate for exactly as
+# long as that is true - Dongning submitting, being annexed, or losing its last
+# province in the superregion all end it.
+#
+# Note taiwan_area is inside south_china_region and so inside
+# china_superregion, which means Dongning sitting on Taiwan alone satisfies the
+# province condition. That is intended: an offshore claimant is the point.
+
+mo_threat_of_legitimacy = {
+	potential = {
+		is_emperor_of_china = yes
+	}
+	trigger = {
+		is_emperor_of_china = yes
+		exists = FRM
+		FRM = {
+			has_country_flag = mo_dongning_defiant
+			is_subject = no
+			any_owned_province = {
+				superregion = china_superregion
+			}
+		}
+	}
+
+	imperial_mandate = -0.05
+}

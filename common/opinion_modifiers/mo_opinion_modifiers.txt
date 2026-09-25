@@ -1,0 +1,10 @@
+# MandateOverhaul
+#
+# Vanilla opinion modifiers sit at the top level of the file, not inside an
+# opinion_modifiers = { } block.
+
+mo_opinion_pretender = {
+	opinion = -100
+	min_opinion = -100
+	yearly_decay = 0
+}

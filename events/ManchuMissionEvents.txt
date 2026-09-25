@@ -142,10 +142,10 @@ country_event = {
 		NOT = {
 			total_development = 600
 		}
-		any_province = {
-			area = taiwan_area
-			is_empty = yes
-		}
+		#@ Was: any taiwan_area province is_empty. Dropped. Koxinga's fleet did not
+		#@ need Taiwan to be vacant - it took the island off the Dutch. Whoever
+		#@ holds those provinces loses them and keeps the core, and may come back
+		#@ for them if they think it worth the trouble.
 	}
 	mean_time_to_happen = {
 		months = 120
@@ -153,12 +153,23 @@ country_event = {
 	immediate = {
 		hidden_effect = {
 			taiwan_area = {
-				limit = {
-					is_empty = yes
-				}
-				add_core = FRM
+				add_core = FRM				#@ no longer limited to empty provinces
 				cede_province = FRM
 				change_culture = chimin
+			}
+			#@ Coastal Fujian goes with him. Three provinces on Taiwan cannot
+			#@ carry what the Zheng actually were - a maritime trading power that
+			#@ raised a hundred thousand men and came within reach of Nanjing.
+			#@ Fuzhou 669 and Quanzhou 1829 are the coastal pair; Jianning 2152
+			#@ and Tingzhou 2153 are inland and stay behind, which is also what
+			#@ leaves Min a capital at Jianning later.
+			669 = {
+				add_core = FRM
+				cede_province = FRM
+			}
+			1829 = {
+				add_core = FRM
+				cede_province = FRM
 			}
 			FRM = {
 				define_ruler = {
@@ -169,6 +180,15 @@ country_event = {
 				add_harmonized_religion = animism
 				change_government = monarchy
 				add_government_reform = chinese_warlord
+				add_navy_tradition = 50				#@ new
+				add_mercantilism = 15				#@ new
+				add_country_modifier = {			#@ new - see common/event_modifiers/
+					name = mo_the_zheng_maritime_network
+					duration = -1
+				}
+				add_historical_friend = MNG			#@ new
+				MNG = { add_historical_friend = FRM }
+				join_all_defensive_wars_of = MNG	#@ new. They fought for the Ming, not beside it.
 				capital_scope = {
 					build_to_forcelimit = {
 						infantry = 0.6
