@@ -51,10 +51,13 @@ country_decisions = {
 			is_colonial_nation = no
 			is_revolutionary = no
 			NOT = { has_reform = shogunate }
-			OR = {
-				religion_group = eastern
-				religion_group = pagan
-			}
+			#@ No religion gate, deliberately. Nothing in the Celestial Empire
+			#@ machinery has one: with Mandate of Heaven on, the celestial_empire
+			#@ reform's potential reduces to is_emperor_of_china = yes, and neither
+			#@ cb_chinese_unification nor on_mandate_of_heaven_gained checks faith.
+			#@ The eastern/pagan gate here was inherited from cb_take_mandate, which
+			#@ this mod bans. The Taiping Heavenly Kingdom was Christian and claimed
+			#@ the mandate in earnest; if that works, nothing should be excluded.
 		}
 		provinces_to_highlight = {
 			OR = {

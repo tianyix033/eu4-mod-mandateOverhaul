@@ -1387,10 +1387,19 @@ cb_chinese_unification = {
 				}
 			}
 			has_government_attribute = has_unify_china_cb
-			any_owned_province = {			#@ new. Holding Liaodong is the historical route in:
-				area = liaoning_area		#@ the Manchu took it before they ever crossed the Wall,
-			}								#@ and with Mandate of Heaven on, only the Emperor and
-											#@ has_unify_china_cb holders could use this CB at all.
+			AND = {							#@ new. Holding Liaodong is the historical route in: the Manchu
+											#@ took it before they ever crossed the Wall. With Mandate of
+											#@ Heaven on, only the Emperor and has_unify_china_cb holders
+											#@ could use this CB at all, which left no Manchu-style path.
+				any_owned_province = {
+					area = liaoning_area
+				}
+				OR = {						#@ Liaodong alone is not enough - be Chinese, or be a horde.
+					culture_group = east_asian
+					has_reform = steppe_horde
+					has_government_attribute = enables_horde_idea_group
+				}
+			}
 		}
 	}
 
