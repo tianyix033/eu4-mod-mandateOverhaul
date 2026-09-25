@@ -93,7 +93,7 @@ country_event = {
 	}
 
 	option = {		# Look outward instead
-		name = mo_dongning.1.d
+		name = mo_dongning.1.e
 		ai_chance = {
 			factor = 5
 		}
