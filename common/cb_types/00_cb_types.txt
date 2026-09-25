@@ -1441,9 +1441,10 @@ cb_take_mandate = {
 	#@ option appears in exactly one wargoal, take_capital_take_mandate, which
 	#@ exactly one CB uses. Blocking here closes the war path completely.
 	#@
-	#@ The only two scripted users were both in ming_crisis.10, where Shun
-	#@ declares on the Ming. Those now use cb_chinese_unification instead, in
-	#@ our copy of events/disaster_ming_crisis.txt.
+	#@ The only two scripted users were both in ming_crisis.3, "Li Zicheng's
+	#@ Rebellion and the Shun Dynasty" - its two options, AI and player. Those
+	#@ now use cb_chinese_unification instead, in our copy of
+	#@ events/disaster_ming_crisis.txt.
 
 	prerequisites_self = {
 		always = no			#@ banned - see the note above
