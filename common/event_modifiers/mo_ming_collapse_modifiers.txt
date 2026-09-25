@@ -1,0 +1,37 @@
+# MandateOverhaul - modifiers for the Ming collapse events in
+# events/mo_ming_collapse.txt.
+#
+# A new file rather than a copy of vanilla's 00_event_modifiers.txt, which is
+# 14172 lines. common/event_modifiers/ concatenates, so there is nothing to
+# carry.
+
+# Applied to the ruler, not the country, so it lasts exactly as long as the
+# emperor who abandoned the capital. add_ruler_modifier ends when the ruler
+# does - which is the whole point.
+mo_abandoned_the_capital = {
+	land_morale = -0.05
+}
+
+# On Beijing itself, for the same ruler's lifetime. The garrison knows it has
+# been written off.
+mo_capital_abandoned_province = {
+	local_defensiveness = -0.25
+}
+
+# On the area the court fled to, for ten years.
+mo_refuge_of_the_court = {
+	local_defensiveness = 0.20
+}
+
+# Standing firm. One year of resolve.
+mo_the_emperor_stands = {
+	land_morale = 0.05
+}
+
+# The dynasty has lost its capital and its ruler at once. Deliberately severe:
+# this is the moment a dynasty stops being able to resist.
+mo_internal_struggles = {
+	global_unrest = 5
+	defensiveness = -0.25
+	land_morale = -0.10
+}

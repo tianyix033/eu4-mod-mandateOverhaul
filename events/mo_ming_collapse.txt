@@ -1,0 +1,194 @@
+# MandateOverhaul - the collapse of a dynasty
+#
+# Two events for the Emperor of China losing the north. They gate on
+# is_emperor_of_china rather than tag = MNG, so they work from any start date
+# and for any dynasty that holds the mandate - which is the point of this mod.
+#
+# Both use mean_time_to_happen rather than an on_action hook, so nothing in
+# vanilla's on_actions needs owning. The triggers are narrow enough that they
+# cost almost nothing to evaluate: is_emperor_of_china fails first for every
+# country on the map bar one.
+#
+# Province and area facts used below, checked against the 1444 map:
+#   Beijing  1816, in hebei_area
+#   Nanjing  1821, in south_jiangsu_area  (NOT jiangsu_area - that is Yangzhou
+#            and Xuzhou, well north of the river)
+#   Xi'an    700,  in shaanxi_area
+#   Chengdu  679,  in sichuan_area
+#   north_china_region: hebei, south_hebei, shandong, henan, north_henan,
+#            shanxi, shaanxi, gansu, west_gansu, jiangsu, anhui - 11 areas.
+#            south_jiangsu_area is NOT among them, so fleeing to Nanjing really
+#            does leave the north.
+
+namespace = mo_ming
+
+########################################
+# Move the Capital
+#
+# The north is falling and the court is still sitting in it. Flee south, flee
+# west, or stay and be buried in it.
+########################################
+country_event = {
+	id = mo_ming.1
+	title = mo_ming.1.t
+	desc = mo_ming.1.d
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	major = yes
+
+	trigger = {
+		is_emperor_of_china = yes
+		capital_scope = {
+			region = north_china_region
+			controlled_by = ROOT
+		}
+		# More than half the north is in rebel hands. north_china_region holds 43
+		# provinces, so 22 is the majority. Note this counts provinces we still
+		# OWN - anything already ceded to Shun stops counting, which is why this
+		# wants to fire before the Shun release rather than after.
+		num_of_owned_provinces_with = {
+			value = 22
+			region = north_china_region
+			controlled_by = REB
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	option = {		# Nanjing
+		name = mo_ming.1.a
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 2
+				num_of_loans = 5
+			}
+			modifier = {
+				factor = 2
+				NOT = { imperial_mandate = 25 }
+			}
+			modifier = {
+				factor = 4
+				is_bankrupt = yes
+			}
+		}
+		add_adm_power = -200
+		add_stability = -2
+		add_ruler_modifier = {
+			name = mo_abandoned_the_capital
+		}
+		1816 = {
+			add_province_modifier = {
+				name = mo_capital_abandoned_province
+				duration = -1
+			}
+		}
+		south_jiangsu_area = {
+			add_province_modifier = {
+				name = mo_refuge_of_the_court
+				duration = 3650
+			}
+		}
+		set_capital = 1821
+	}
+
+	option = {		# Chengdu - only if Xi'an is still ours and held
+		name = mo_ming.1.b
+		trigger = {
+			700 = {
+				owned_by = ROOT
+				controlled_by = ROOT
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2
+				num_of_loans = 5
+			}
+			modifier = {
+				factor = 2
+				NOT = { imperial_mandate = 25 }
+			}
+			modifier = {
+				factor = 4
+				is_bankrupt = yes
+			}
+		}
+		add_adm_power = -200
+		add_stability = -2
+		add_ruler_modifier = {
+			name = mo_abandoned_the_capital
+		}
+		1816 = {
+			add_province_modifier = {
+				name = mo_capital_abandoned_province
+				duration = -1
+			}
+		}
+		sichuan_area = {
+			add_province_modifier = {
+				name = mo_refuge_of_the_court
+				duration = 3650
+			}
+		}
+		set_capital = 679
+	}
+
+	option = {		# Stay
+		name = mo_ming.1.c
+		ai_chance = {
+			factor = 85
+		}
+		add_mandate = 5
+		add_country_modifier = {
+			name = mo_the_emperor_stands
+			duration = 365
+		}
+	}
+}
+
+########################################
+# The Capital Has Fallen
+#
+# The emperor dies with the city. Chongzhen hanged himself on Coal Hill rather
+# than be taken, and the dynasty did not recover from losing both at once.
+#
+# fire_only_once is deliberate: this is the death of a dynasty, not a recurring
+# setback. A later emperor who loses a later capital is a different story and
+# should get its own event rather than this one firing again.
+########################################
+country_event = {
+	id = mo_ming.2
+	title = mo_ming.2.t
+	desc = mo_ming.2.d
+	picture = SUFFERING_CHINESE_VILLAGE_eventPicture
+
+	fire_only_once = yes
+	major = yes
+
+	trigger = {
+		is_emperor_of_china = yes
+		capital_scope = {
+			NOT = { controlled_by = ROOT }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	option = {
+		name = mo_ming.2.a
+		add_mandate = -20
+		add_stability = -3
+		add_country_modifier = {
+			name = mo_internal_struggles
+			duration = 7300
+		}
+		kill_ruler = yes
+	}
+}

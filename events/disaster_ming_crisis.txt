@@ -121,6 +121,11 @@ country_event = {
 			region = north_china_region
 			controlled_by = REB
 		}
+		any_owned_province = {			#@ new. Ten open provinces is a peasant revolt; a dynasty
+			region = north_china_region	#@ does not fall until a fortress falls with them.
+			controlled_by = REB
+			fort_level = 1
+		}
 		any_owned_province = {
 			OR = {
 				area = gansu_area
@@ -147,9 +152,9 @@ country_event = {
 						area = west_gansu_area
 						area = shaanxi_area
 						area = shanxi_area
-						area = hebei_area
-						area = south_hebei_area
-						area = liaoning_area
+						#@ hebei_area, south_hebei_area and liaoning_area removed. Shun rising
+						#@ out of Shaanxi should not be handed Beijing and the whole northeast
+						#@ by fiat - Li Zicheng had to march on the capital and take it.
 					}
 					OR = {
 						controlled_by = REB
@@ -159,19 +164,40 @@ country_event = {
 				add_core = CSH
 				clear_rebels = yes
 			}
-			every_owned_province = { #get rid of bordergore from random Mongolian provinces
+			#@ Was: core these to Shun as anti-bordergore. A Shaanxi peasant army
+			#@ has no business inheriting the Ordos. When the Ming grip on the
+			#@ steppe frontier fails, the steppe takes it back - Mongolia first,
+			#@ then Khorchin or Khalkha, and if none of them are left standing the
+			#@ cession spawns Mongolia. At the 1444 start this is Ordos, Hohhot
+			#@ and Hetao; later starts may differ, hence the region scope.
+			every_owned_province = {
 				limit = {
 					region = mongolia_region
-					any_neighbor_province = {
-						is_core = CSH
-					}
 					OR = {
 						controlled_by = REB
 						controlled_by = ROOT
 					}
 				}
-				add_core = CSH
 				clear_rebels = yes
+				if = {
+					limit = { exists = KHA }
+					add_core = KHA
+					cede_province = KHA
+				}
+				else_if = {
+					limit = { exists = KRC }
+					add_core = KRC
+					cede_province = KRC
+				}
+				else_if = {
+					limit = { exists = KLK }
+					add_core = KLK
+					cede_province = KLK
+				}
+				else = {
+					add_core = KHA
+					cede_province = KHA
+				}
 			}
 			release = CSH
 			CSH = {
@@ -329,6 +355,11 @@ country_event = {
 	major = yes
 	
 	trigger = {
+		always = no		#@ DISABLED. the Yunnan Protectorate is backwards: the Ming lost the north to Li
+						#@ Zicheng, and Hunan, Hubei and Sichuan to Zhang Xianzhong. Yunnan,
+						#@ Guangdong and Fujian were its last bastions, not its first losses -
+						#@ the Southern Ming held out there for decades. Replaced by our own
+						#@ events in events/mo_ming_collapse.txt.
 		NOT = { exists = CDL }
 		num_of_owned_provinces_with = {
 			value = 10
@@ -444,6 +475,11 @@ country_event = {
 	major = yes
 	
 	trigger = {
+		always = no		#@ DISABLED. the loss of the south is backwards: the Ming lost the north to Li
+						#@ Zicheng, and Hunan, Hubei and Sichuan to Zhang Xianzhong. Yunnan,
+						#@ Guangdong and Fujian were its last bastions, not its first losses -
+						#@ the Southern Ming held out there for decades. Replaced by our own
+						#@ events in events/mo_ming_collapse.txt.
 		OR = {
 			NOT = { exists = WUU }
 			NOT = { exists = YUE }
