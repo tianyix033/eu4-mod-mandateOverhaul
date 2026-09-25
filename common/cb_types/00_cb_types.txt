@@ -1387,6 +1387,10 @@ cb_chinese_unification = {
 				}
 			}
 			has_government_attribute = has_unify_china_cb
+			any_owned_province = {			#@ new. Holding Liaodong is the historical route in:
+				area = liaoning_area		#@ the Manchu took it before they ever crossed the Wall,
+			}								#@ and with Mandate of Heaven on, only the Emperor and
+											#@ has_unify_china_cb holders could use this CB at all.
 		}
 	}
 
@@ -1421,18 +1425,19 @@ cb_chinese_unification = {
 cb_take_mandate = {
 	valid_for_subject = no
 
-	#@ The mandate is no longer taken by war. It moves through the decision in
-	#@ decisions/mo_claim_mandate.txt, which requires Beijing, Nanjing and Xi'an
-	#@ as cores plus 400 development - so a claimant already holds China before
-	#@ it can claim to rule it.
+	#@ BANNED. The mandate is no longer taken by war at all; it moves only
+	#@ through decisions/mo_claim_mandate.txt.
 	#@
-	#@ is_triggered_only rather than a blocked prerequisite, deliberately: 31
-	#@ vanilla CBs use this, and it removes the CB from normal selection while
-	#@ leaving scripted grants working. events/disaster_ming_crisis.txt has the
-	#@ Chinese warlord declare with this CB twice, and that should still fire.
-	is_triggered_only = yes
+	#@ This CB is the sole route to the po_take_mandate peace option - that
+	#@ option appears in exactly one wargoal, take_capital_take_mandate, which
+	#@ exactly one CB uses. Blocking here closes the war path completely.
+	#@
+	#@ The only two scripted users were both in ming_crisis.10, where Shun
+	#@ declares on the Ming. Those now use cb_chinese_unification instead, in
+	#@ our copy of events/disaster_ming_crisis.txt.
 
 	prerequisites_self = {
+		always = no			#@ banned - see the note above
 		has_dlc = "Mandate of Heaven"
 		is_subject = no
 		NOT = { has_reform = shogunate }

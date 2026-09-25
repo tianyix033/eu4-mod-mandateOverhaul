@@ -228,7 +228,7 @@ country_event = {
 			CSH = {
 				declare_war_with_cb = {
 					who = root
-					casus_belli = cb_take_mandate
+					casus_belli = cb_chinese_unification	#@ was cb_take_mandate, which is now banned
 				}
 			}
 		}
@@ -262,7 +262,7 @@ country_event = {
 			CSH = {
 				declare_war_with_cb = {
 					who = root
-					casus_belli = cb_take_mandate
+					casus_belli = cb_chinese_unification	#@ was cb_take_mandate, which is now banned
 				}
 			}
 		}
