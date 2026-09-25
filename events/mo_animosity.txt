@@ -1,0 +1,88 @@
+# MandateOverhaul - Chinese kingdoms and the throne
+#
+# The declarative version of this is not possible. Opinion modifiers accept
+# only opinion, yearly_decay, years, months, min, max, max_vassal and
+# max_in_other_direction - there is no trigger or potential block anywhere in
+# the format, so a modifier cannot say "applies between these two reforms". And
+# the only standing opinion-toward-a-class modifiers in the game key on culture
+# and religion (relation_with_same_culture, relation_with_heretics,
+# reverse_relation_with_*). Nothing keys on government type or reform.
+#
+# So this is the scripted equivalent, in two halves:
+#
+#   common/on_actions/mo_on_actions.txt catches the moment a dynasty takes the
+#   mandate and sets every existing Chinese kingdom against it.
+#
+#   mo_animosity.1 below keeps it current afterwards - kingdoms that form
+#   later, kingdoms that break free of a subject relationship, and a new
+#   emperor replacing an old one all get picked up.
+#
+# It runs on the EMPEROR, not on the kingdoms. That way it is evaluated for one
+# country instead of every Chinese splinter state, and the scoping comes out
+# right: inside every_country the scope is the kingdom, so
+# has_opinion_modifier = { who = ROOT } asks "does this kingdom hold it against
+# the Emperor", which is the direction we want. Asking from the kingdom's side
+# inverts it and tests the Emperor's opinion of them instead.
+#
+# Checking the opinion modifier rather than a country flag means it cannot go
+# stale: a new dynasty starts with nobody holding the grudge and it is applied
+# afresh within a few months.
+#
+# Subjects are excluded, as asked. A vassal or tributary of the Emperor is in
+# no position to hold a grudge on the record, and marking one would only make a
+# permanently disloyal subject nobody could repair.
+#
+# Chinese kingdoms never resent each other - the modifier only ever points at
+# whoever holds the mandate.
+
+namespace = mo_animosity
+
+country_event = {
+	id = mo_animosity.1
+	title = mo_animosity.1.t
+	desc = mo_animosity.1.d
+	hidden = yes
+
+	trigger = {
+		is_emperor_of_china = yes
+		any_country = {
+			has_reform = chinese_warlord
+			is_subject = no
+			NOT = {
+				has_opinion_modifier = {
+					who = ROOT
+					modifier = mo_opinion_usurper
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_reform = chinese_warlord
+					is_subject = no
+					NOT = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = mo_opinion_usurper
+						}
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = mo_opinion_usurper
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mo_animosity.1.a
+	}
+}

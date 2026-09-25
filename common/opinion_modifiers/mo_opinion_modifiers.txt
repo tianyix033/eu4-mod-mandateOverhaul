@@ -1,10 +1,24 @@
 # MandateOverhaul
 #
 # Vanilla opinion modifiers sit at the top level of the file, not inside an
-# opinion_modifiers = { } block.
+# opinion_modifiers = { } block, and they accept only opinion, yearly_decay,
+# years, months, min, max, max_vassal and max_in_other_direction. There is no
+# trigger or potential block - they are pure data, applied by script.
+#
+# The floor key is "min", not "min_opinion".
 
+# A Ming loyalist court that will not recognise the new dynasty.
 mo_opinion_pretender = {
 	opinion = -100
-	min_opinion = -100
+	min = -100
+	yearly_decay = 0
+}
+
+# What a Chinese kingdom thinks of whoever is sitting on the throne it believes
+# should be Chinese. Applied by common/on_actions/mo_on_actions.txt and kept
+# current by mo_animosity.1.
+mo_opinion_usurper = {
+	opinion = -100
+	min = -100
 	yearly_decay = 0
 }

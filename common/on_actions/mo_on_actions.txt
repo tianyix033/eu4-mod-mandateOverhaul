@@ -1,0 +1,21 @@
+# MandateOverhaul
+#
+# on_actions combine across files since 1.36, so this adds to vanilla's
+# on_mandate_of_heaven_gained rather than replacing it.
+#
+# When a new dynasty takes the mandate, every independent Chinese kingdom
+# decides it has been usurped. ROOT here is the country gaining the mandate.
+
+on_mandate_of_heaven_gained = {
+	every_country = {
+		limit = {
+			has_reform = chinese_warlord
+			is_subject = no
+			NOT = { tag = ROOT }
+		}
+		add_opinion = {
+			who = ROOT
+			modifier = mo_opinion_usurper
+		}
+	}
+}
