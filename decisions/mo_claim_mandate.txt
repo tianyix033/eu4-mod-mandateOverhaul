@@ -30,8 +30,11 @@
 # The handoff itself needs no scripting. set_emperor_of_china fires vanilla's
 # on_mandate_of_heaven_gained, which converts nomad tech and units to Chinese,
 # turns a tribal or non-monarchy government into a monarchy, adds the
-# celestial_empire reform directly (bypassing its own culture-group potential,
-# which matters because manchu is evenks, not east_asian), sets mandate and
+# celestial_empire reform directly (its potential collapses to
+# is_emperor_of_china = yes once Mandate of Heaven is on, so the culture-group
+# branch is never evaluated - and it would pass regardless, since MCH and QNG
+# both use manchu_new, which sits in east_asian; plain manchu, in evenks, is a
+# separate culture), sets mandate and
 # meritocracy to 60, grants new_mandate_holder for 25 years, cores Beijing,
 # Nanjing and Kaifeng, claims all of china_superregion, clears factions and
 # removes lost_mandate_of_heaven. The old holder gets on_mandate_of_heaven_lost.
@@ -51,6 +54,31 @@ country_decisions = {
 			is_colonial_nation = no
 			is_revolutionary = no
 			NOT = { has_reform = shogunate }
+			#@ Who may even see this. Without these two the decision showed for
+			#@ every country in the world - Austria included - because potential
+			#@ tested government type and DLC but never culture or geography.
+			#@ vanilla's cb_take_mandate gated on religion_group pagan/eastern plus
+			#@ "ai = no OR east_asian culture", and that ai = no is exactly why a
+			#@ PLAYER of any culture could take the mandate in vanilla. The religion
+			#@ half is deliberately not restored (see the note below); the culture
+			#@ half is, widened to hordes to match cb_chinese_unification's own gate
+			#@ in common/cb_types/00_cb_types.txt so the two read identically.
+			OR = {
+				culture_group = east_asian
+				has_government_attribute = has_unify_china_cb		# the chinese_warlord kingdoms
+				has_reform = steppe_horde
+				has_government_attribute = enables_horde_idea_group
+			}
+			#@ And you must actually be in China. Ruling it from Vienna is not a
+			#@ thing that should appear on the decision list at all.
+			#@ Note china_superregion is north_china + xinan + south_china only.
+			#@ liaoning_area sits in manchuria_region, OUTSIDE it, so a Manchu
+			#@ holding only Liaodong still does not see this - deliberately. The
+			#@ allow block needs Beijing, Nanjing and Xi'an as cores anyway, so
+			#@ nobody who could actually act on it is hidden from it.
+			any_owned_province = {
+				superregion = china_superregion
+			}
 			#@ No religion gate, deliberately. Nothing in the Celestial Empire
 			#@ machinery has one: with Mandate of Heaven on, the celestial_empire
 			#@ reform's potential reduces to is_emperor_of_china = yes, and neither
