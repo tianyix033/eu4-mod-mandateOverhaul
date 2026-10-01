@@ -25,9 +25,7 @@ feudatory rulers a weakened Chinese state had to tolerate.
 
 **Dongning and the Zheng.** An event chain for the Zheng regime on Formosa,
 which did not regard itself as an *ally* of the Ming so much as the continuation
-of it — it kept the Yongli calendar long after the mainland was gone. The chain
-lets that relationship be chosen rather than assumed, and deliberately does not
-bind Formosa into the mainland's defensive wars.
+of it — it kept the Yongli calendar long after the mainland was gone. It can now decide its fate against an aggressive emperor.
 
 **Manchu missions.** Edits to the Manchu mission events, including the maritime
 network and the Jurchen path toward the mandate.
