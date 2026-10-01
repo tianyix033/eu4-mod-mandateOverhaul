@@ -186,9 +186,21 @@ country_event = {
 					name = mo_the_zheng_maritime_network
 					duration = -1
 				}
-				add_historical_friend = MNG			#@ new
-				MNG = { add_historical_friend = FRM }
-				join_all_defensive_wars_of = MNG	#@ new. They fought for the Ming, not beside it.
+				#@ REMOVED deliberately - this was add_historical_friend = MNG, the same
+				#@ back from MNG, and join_all_defensive_wars_of = MNG.
+				#@
+				#@ The Zheng did not consider themselves allies of the Ming; they
+				#@ considered themselves TO BE the Ming, keeping the Yongli calendar and
+				#@ Yongli titles long after the mainland was gone. Whichever Ming is
+				#@ still on the map here is a different branch of the Zhu - a rival
+				#@ claim to the same mandate, not a cause worth dying for. Binding
+				#@ Formosa into its defensive wars made Dongning the client of a court
+				#@ it would not have recognised, and in play it pulled the Zheng fleet
+				#@ into mainland land wars it had no reason to join.
+				#@
+				#@ mo_dongning.1 in events/mo_dongning.txt is where this relationship
+				#@ actually gets decided, and it already offers fighting on for the Ming
+				#@ as one of four options rather than assuming it.
 				capital_scope = {
 					build_to_forcelimit = {
 						infantry = 0.6
